@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Севриков Матвей ИС-3.1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        .task {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+        
+        .variant {
+            width: 25%;
+        }
+        
+        .answer {
+            width: 100%;
+            padding: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+            background-color: #45a049;
+        }
+        
+        button:active {
+            background-color: red;
+            transform: scale(0.95);
+        }
+        
+        #score {
+            font-weight: bold;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        
+        p {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Тест по информатике</h1>
+
+    <script>
+        // Массив с вопросами, вариантами ответов и правильными ответами
+        const questions = [
+            {
+                question: "Автоматическое устройство осуществило перекодировку информационного сообщения на русском языке, первоначально записанного в 16-битном коде Unicode, в 8-битную кодировку КОИ-8. При этом информационное сообщение уменьшилось на 480 бит. Какова длина сообщения в символах?",
+                options: ["30", "60", "120", "480"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Информационное сообщение объемом 450 бит состоит из 150 символов. Каков информационный вес каждого символа этого сообщения?",
+                options: ["5 бит", "30 бит", "3 бита", "3 байта"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Информационное сообщение объемом 3 Кбайта содержит 6144 символа. Сколько символов содержит алфавит, при помощи которого было записано это сообщение?",
+                options: ["4", "16", "8", "32"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Сколько бит информации несет сообщение о том, что из колоды в 32 карты достали даму пик?",
+                options: ["2 бита", "4 бита", "5 бит", "6 бит"],
+                correctAnswer: "3"
+            },
+            {
+                question: "В кодировке Unicode на каждый символ отводится 2 байта. Определите информационный объем сообщения из 20 символов в этой кодировке.",
+                options: ["20 бит", "40 бит", "160 бит", "320 бит"],
+                correctAnswer: "4"
+            },
+            {
+                question: "Сколько существует различных последовательностей из символов 'а' и 'б' длиной ровно 5 символов?",
+                options: ["8", "16", "32", "64"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Сообщение занимает 3 страницы по 25 строк. В каждой строке записано по 60 символов. Сколько символов в использованном алфавите, если все сообщение содержит 1125 байтов информации?",
+                options: ["2", "4", "8", "16"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Для кодирования секретного сообщения используются 12 специальных значков-символов. При этом символы кодируются одним и тем же минимально возможным количеством бит. Чему равен информационный объем сообщения длиной в 256 символов?",
+                options: ["256 бит", "384 бита", "512 бит", "1024 бита"],
+                correctAnswer: "4"
+            },
+            {
+                question: "Скорость передачи данных через ADSL-соединение равна 128000 бит/c. Через данное соединение передают файл размером 625 Кбайт. Определите время передачи файла в секундах.",
+                options: ["20", "30", "40", "50"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Какой объем видеопамяти необходим для хранения изображения при условии, что разрешающая способность дисплея равна 640 × 350 пикселей, количество используемых цветов – 16?",
+                options: ["112000 байт", "1120 Кбайт", "112 Кбайт", "112000 бит"],
+                correctAnswer: "1"
+            }
+        ];
+
+        // Создаем вопросы на странице с помощью цикла
+        document.write('<div id="test-container">');
+        for (let i = 0; i < questions.length; i++) {
+            document.write(`
+                <table border="1" id="q${i + 1}">
+                    <tr>
+                        <td rowspan="3">${i + 1}</td>
+                        <td colspan="4" class="task">
+                            ${questions[i].question}
+                        </td>
+                    </tr>
+                    <tr>
+            `);
+            
+            // Создаем варианты ответов с помощью цикла
+            for (let j = 0; j < questions[i].options.length; j++) {
+                document.write(`<td class="variant">${questions[i].options[j]}</td>`);
+            }
+            
+            document.write(`
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <input id="a${i + 1}" type="text" class="answer" placeholder="Ответ" />
+                        </td>
+                    </tr>
+                </table>
+            `);
+        }
+        document.write('</div>');
+    </script>
+
+    <button onclick="Check()">Проверить</button>
+    <div>Правильно: <span id="score">0</span> из <span id="totalQuestions">10</span></div>
+
+    <script>
+        // Обновляем общее количество вопросов при загрузке страницы
+        document.getElementById('totalQuestions').textContent = questions.length;
+        
+        function Check() {
+            let score = 0;
+            const totalQuestions = questions.length;
+            
+            // Проверяем ответы с помощью цикла
+            for (let i = 0; i < totalQuestions; i++) {
+                let q = document.getElementById('q' + (i + 1));
+                let a = document.getElementById('a' + (i + 1));
+                
+                if (a.value === questions[i].correctAnswer) {
+                    q.style.border = '2px solid green';
+                    score++;
+                } else {
+                    q.style.border = '2px solid red';
+                }
+            }
+            
+            document.getElementById('score').innerHTML = score;
+        }
+    </script>
+</body>
+</html>
