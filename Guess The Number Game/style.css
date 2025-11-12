@@ -1,41 +1,25 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background-color: #fff;
-    color: #333;
-    line-height: 1.6;
-    padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .container {
-    max-width: 800px;
     width: 100%;
     text-align: center;
+    transition: all 0.3s ease;
+    max-width: 100%;
+    padding-top: 20px;
 }
 
 h1 {
-    font-size: 2rem;
-    margin-bottom: 2.5rem;
-    color: #333;
+    font-size: var(--h1-font-size, 2rem);
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
     font-weight: 300;
     letter-spacing: 0.5px;
+    transition: all 0.3s ease;
 }
 
 .game-container {
-    background-color: #f9f9f9;
+    background-color: var(--button-bg);
     padding: 30px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--button-border);
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
@@ -45,6 +29,7 @@ h1 {
 .input-section {
     margin: 20px 0;
     text-align: center;
+    color: var(--text-color);
 }
 
 input[type="number"] {
@@ -52,9 +37,9 @@ input[type="number"] {
     font-size: 16px;
     width: 120px;
     margin: 0 10px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    color: #333;
+    background-color: var(--bg-color);
+    border: 1px solid var(--button-border);
+    color: var(--text-color);
     border-radius: 4px;
     text-align: center;
     transition: border-color 0.3s;
@@ -62,17 +47,17 @@ input[type="number"] {
 
 input[type="number"]:focus {
     outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    border-color: var(--text-color);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
-.nav-button {
+.game-button {
     display: inline-block;
     padding: 12px 24px;
     text-decoration: none;
-    color: #333;
-    border: 1px solid #ccc;
-    background-color: #fff;
+    color: var(--text-color);
+    border: 1px solid var(--button-border);
+    background-color: var(--bg-color);
     border-radius: 4px;
     font-size: 0.9rem;
     font-weight: 400;
@@ -87,38 +72,38 @@ input[type="number"]:focus {
     margin: 5px;
 }
 
-.nav-button::before {
+.game-button::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: #333;
+    background: var(--text-color);
     transition: all 0.4s ease;
     z-index: -1;
 }
 
-.nav-button:hover {
-    color: #fff;
+.game-button:hover {
+    color: var(--bg-color);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border-color: #333;
+    border-color: var(--text-color);
 }
 
-.nav-button:hover::before {
+.game-button:hover::before {
     left: 0;
 }
 
-.nav-button:disabled {
+.game-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
-    color: #333;
+    color: var(--text-color);
 }
 
-.nav-button:disabled::before {
+.game-button:disabled::before {
     display: none;
 }
 
@@ -130,6 +115,7 @@ input[type="number"]:focus {
     font-size: 18px;
     font-weight: bold;
     border: 1px solid transparent;
+    color: var(--text-color);
 }
 
 .success {
@@ -153,6 +139,7 @@ input[type="number"]:focus {
 .attempts {
     margin-top: 20px;
     text-align: center;
+    color: var(--text-color);
 }
 
 .attempt-list {
@@ -164,16 +151,18 @@ input[type="number"]:focus {
 .attempt-list li {
     padding: 8px 12px;
     margin: 5px 0;
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: var(--hover-bg);
     border-left: 4px solid #17a2b8;
     text-align: left;
     border-radius: 0 4px 4px 0;
+    color: var(--text-color);
 }
 
 /* Стили для неиспользованных чисел */
 .remaining-numbers {
     margin-top: 30px;
     text-align: center;
+    color: var(--text-color);
 }
 
 .numbers-container {
@@ -185,7 +174,7 @@ input[type="number"]:focus {
     max-height: 150px;
     overflow-y: auto;
     padding: 10px;
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: var(--hover-bg);
     border-radius: 4px;
 }
 
@@ -195,37 +184,24 @@ input[type="number"]:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #e9ecef;
-    border: 1px solid #dee2e6;
+    background-color: var(--button-bg);
+    border: 1px solid var(--button-border);
     border-radius: 4px;
     font-size: 14px;
     font-weight: 500;
-    color: #495057;
+    color: var(--text-color);
     transition: all 0.2s ease;
 }
 
 .number-item.used {
-    background-color: #6c757d;
-    color: white;
+    background-color: var(--button-active);
+    color: var(--text-color);
     text-decoration: line-through;
-}
-
-.back-link {
-    margin-top: 30px;
-}
-
-.back-link a {
-    color: #4a90e2;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.back-link a:hover {
-    text-decoration: underline;
+    opacity: 0.6;
 }
 
 @media (max-width: 768px) {
-    .nav-button {
+    .game-button {
         width: 100%;
         max-width: 250px;
         padding: 10px 20px;
@@ -251,15 +227,17 @@ input[type="number"]:focus {
 }
 
 @media (max-width: 480px) {
-    body {
+    .container {
         padding: 15px;
+        padding-top: 85px;
+        padding-bottom: 70px;
     }
     
     h1 {
         font-size: 1.5rem;
     }
     
-    .nav-button {
+    .game-button {
         font-size: 0.85rem;
         min-width: 130px;
     }

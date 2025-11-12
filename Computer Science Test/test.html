@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по информатике | Севриков Матвей ИС-3.1</title>
+    <link rel="stylesheet" href="../common.css">
+    <style>
+        .container {
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+            max-width: 100%;
+        }
+
+        h1 {
+            font-size: var(--h1-font-size, 2rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        #test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            border: 1px solid var(--button-border);
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid var(--button-border);
+        }
+        
+        .task {
+            font-weight: bold;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+        }
+        
+        .variant {
+            width: 25%;
+        }
+        
+        .answer {
+            width: 100%;
+            padding: 8px;
+            font-size: var(--body-font-size, 1rem);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--button-border);
+            border-radius: 4px;
+        }
+        
+        .answer:focus {
+            outline: none;
+            border-color: var(--text-color);
+        }
+        
+        .check-button {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid var(--button-border);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .check-button:hover {
+            transform: scale(1.05);
+            background-color: var(--button-active);
+        }
+        
+        .check-button:active {
+            background-color: var(--button-active);
+            transform: scale(0.95);
+        }
+        
+        #score {
+            font-weight: bold;
+            font-size: 20px;
+            margin-left: 10px;
+            color: var(--text-color);
+        }
+        
+        .score-container {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Верхняя панель загрузится автоматически через navbar.js -->
+
+    <div class="container">
+        <h1>Тест по информатике</h1>
+
+        <div id="test-container">
+            <!-- Тест будет сгенерирован JavaScript -->
+        </div>
+
+        <button class="check-button" onclick="Check()">Проверить</button>
+        <div class="score-container">Правильно: <span id="score">0</span> из <span id="totalQuestions">10</span></div>
+    </div>
+
+    <script>
+        // Массив с вопросами, вариантами ответов и правильными ответами
+        const questions = [
+            {
+                question: "Автоматическое устройство осуществило перекодировку информационного сообщения на русском языке, первоначально записанного в 16-битном коде Unicode, в 8-битную кодировку КОИ-8. При этом информационное сообщение уменьшилось на 480 бит. Какова длина сообщения в символах?",
+                options: ["30", "60", "120", "480"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Информационное сообщение объемом 450 бит состоит из 150 символов. Каков информационный вес каждого символа этого сообщения?",
+                options: ["5 бит", "30 бит", "3 бита", "3 байта"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Информационное сообщение объемом 3 Кбайта содержит 6144 символа. Сколько символов содержит алфавит, при помощи которого было записано это сообщение?",
+                options: ["4", "16", "8", "32"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Сколько бит информации несет сообщение о том, что из колоды в 32 карты достали даму пик?",
+                options: ["2 бита", "4 бита", "5 бит", "6 бит"],
+                correctAnswer: "3"
+            },
+            {
+                question: "В кодировке Unicode на каждый символ отводится 2 байта. Определите информационный объем сообщения из 20 символов в этой кодировке.",
+                options: ["20 бит", "40 бит", "160 бит", "320 бит"],
+                correctAnswer: "4"
+            },
+            {
+                question: "Сколько существует различных последовательностей из символов 'а' и 'б' длиной ровно 5 символов?",
+                options: ["8", "16", "32", "64"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Сообщение занимает 3 страницы по 25 строк. В каждой строке записано по 60 символов. Сколько символов в использованном алфавите, если все сообщение содержит 1125 байтов информации?",
+                options: ["2", "4", "8", "16"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Для кодирования секретного сообщения используются 12 специальных значков-символов. При этом символы кодируются одним и тем же минимально возможным количеством бит. Чему равен информационный объем сообщения длиной в 256 символов?",
+                options: ["256 бит", "384 бита", "512 бит", "1024 бита"],
+                correctAnswer: "4"
+            },
+            {
+                question: "Скорость передачи данных через ADSL-соединение равна 128000 бит/c. Через данное соединение передают файл размером 625 Кбайт. Определите время передачи файла в секундах.",
+                options: ["20", "30", "40", "50"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Какой объем видеопамяти необходим для хранения изображения при условии, что разрешающая способность дисплея равна 640 × 350 пикселей, количество используемых цветов – 16?",
+                options: ["112000 байт", "1120 Кбайт", "112 Кбайт", "112000 бит"],
+                correctAnswer: "1"
+            }
+        ];
+
+        // Создаем вопросы на странице после загрузки DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            const testContainer = document.getElementById('test-container');
+            
+            for (let i = 0; i < questions.length; i++) {
+                const table = document.createElement('table');
+                table.id = 'q' + (i + 1);
+                table.border = "1";
+                
+                // Создаем строки таблицы
+                const row1 = document.createElement('tr');
+                
+                const cell1 = document.createElement('td');
+                cell1.rowSpan = 3;
+                cell1.textContent = i + 1;
+                
+                const cell2 = document.createElement('td');
+                cell2.colSpan = 4;
+                cell2.className = 'task';
+                cell2.textContent = questions[i].question;
+                
+                row1.appendChild(cell1);
+                row1.appendChild(cell2);
+                
+                // Вторая строка с вариантами ответов
+                const row2 = document.createElement('tr');
+                for (let j = 0; j < questions[i].options.length; j++) {
+                    const variantCell = document.createElement('td');
+                    variantCell.className = 'variant';
+                    variantCell.textContent = questions[i].options[j];
+                    row2.appendChild(variantCell);
+                }
+                
+                // Третья строка с полем для ответа
+                const row3 = document.createElement('tr');
+                const answerCell = document.createElement('td');
+                answerCell.colSpan = 5;
+                
+                const answerInput = document.createElement('input');
+                answerInput.id = 'a' + (i + 1);
+                answerInput.type = 'text';
+                answerInput.className = 'answer';
+                answerInput.placeholder = 'Ответ';
+                
+                answerCell.appendChild(answerInput);
+                row3.appendChild(answerCell);
+                
+                // Добавляем все строки в таблицу
+                table.appendChild(row1);
+                table.appendChild(row2);
+                table.appendChild(row3);
+                
+                // Добавляем таблицу в контейнер
+                testContainer.appendChild(table);
+            }
+            
+            // Обновляем общее количество вопросов
+            document.getElementById('totalQuestions').textContent = questions.length;
+        });
+
+        function Check() {
+            let score = 0;
+            const totalQuestions = questions.length;
+            
+            // Проверяем ответы с помощью цикла
+            for (let i = 0; i < totalQuestions; i++) {
+                let q = document.getElementById('q' + (i + 1));
+                let a = document.getElementById('a' + (i + 1));
+                
+                if (a && a.value === questions[i].correctAnswer) {
+                    q.style.border = '2px solid green';
+                    score++;
+                } else {
+                    q.style.border = '2px solid red';
+                }
+            }
+            
+            document.getElementById('score').innerHTML = score;
+        }
+    </script>
+
+    <script src="../navbar.js"></script>
+</body>
+</html>

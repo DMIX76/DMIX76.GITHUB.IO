@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Севриков Матвей ИС-3.1</title>
+    <title>Главная страница | Севриков Матвей ИС-3.1</title>
     <style>
         * {
             margin: 0;
@@ -11,10 +11,78 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --nav-bg: #ffffff;
+            --nav-border: #e0e0e0;
+            --icon-color: #333333;
+            --hover-bg: rgba(0, 0, 0, 0.03);
+            --settings-bg: #ffffff;
+            --settings-border: #e0e0e0;
+            --button-bg: #f5f5f5;
+            --button-active: #e0e0e0;
+            --button-border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --nav-bg: #000000;
+            --nav-border: #333333;
+            --icon-color: #cccccc;
+            --hover-bg: rgba(255, 255, 255, 0.03);
+            --settings-bg: #1a1a1a;
+            --settings-border: #333333;
+            --button-bg: #2a2a2a;
+            --button-active: #3a3a3a;
+            --button-border: #444444;
+        }
+
+        /* Стили для размера текста - ВСЕХ текстовых элементов */
+        [data-font-size="small"] {
+            --body-font-size: 0.85rem;
+            --h1-font-size: 1.6rem;
+            --nav-link-font-size: 12px;
+            --button-font-size: 0.7rem;
+            --dropdown-font-size: 0.7rem;
+            --project-font-size: 0.75rem;
+            --settings-font-size: 10px;
+        }
+
+        [data-font-size="standard"] {
+            --body-font-size: 1rem;
+            --h1-font-size: 2rem;
+            --nav-link-font-size: 14px;
+            --button-font-size: 0.75rem;
+            --dropdown-font-size: 0.75rem;
+            --project-font-size: 0.8rem;
+            --settings-font-size: 11px;
+        }
+
+        [data-font-size="large"] {
+            --body-font-size: 1.15rem;
+            --h1-font-size: 2.4rem;
+            --nav-link-font-size: 16px;
+            --button-font-size: 0.75rem;
+            --dropdown-font-size: 0.75rem;
+            --project-font-size: 0.8rem;
+            --settings-font-size: 12px;
+        }
+
+        /* Стили для ширины ВСЕЙ СТРАНИЦЫ */
+        body[data-container-width="standard"] {
+            max-width: 100%;
+        }
+
+        body[data-container-width="wide"] {
+            max-width: 1400px;
+        }
         
         body {
-            background-color: #fff;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
@@ -22,132 +90,859 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-        }
-        
-        .container {
-            max-width: 800px;
+            transition: all 0.3s ease;
+            padding-top: 100px;
+            padding-bottom: 80px;
+            font-size: var(--body-font-size, 1rem);
+            margin: 0 auto;
             width: 100%;
-            text-align: center;
         }
-        
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 2.5rem;
-            color: #333;
-            font-weight: 300;
-            letter-spacing: 0.5px;
+
+        /* Стили для верхней навигационной панели */
+        .top-nav-panel {
+            width: 100%;
+            background-color: var(--nav-bg);
+            border-bottom: 1px solid var(--nav-border);
+            display: flex;
+            align-items: center;
+            padding: 20px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 70px;
+            z-index: 100;
+            transition: all 0.3s ease;
         }
-        
-        .nav-container {
+
+        .top-nav-content {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
             gap: 15px;
-            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: var(--nav-link-font-size, 14px);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--text-color);
+            transform: scaleX(0);
+            transition: transform 0.2s;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .settings-dropdown.active .nav-link::after {
+            transform: scaleX(1);
+        }
+
+        .nav-link.strikethrough {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* Выпадающее меню настроек */
+        .settings-dropdown {
+            position: relative;
+        }
+
+        .settings-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--settings-bg);
+            border: 1px solid var(--settings-border);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            min-width: 260px;
+            padding: 16px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .settings-dropdown.active .settings-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-section {
+            margin-bottom: 20px;
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            user-select: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .settings-buttons-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .settings-button {
+            flex: 1;
+            padding: 8px 4px;
+            border: 1px solid var(--settings-border);
+            background-color: transparent;
+            color: var(--text-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: var(--settings-font-size, 11px);
+            text-align: center;
+            transition: all 0.2s;
+            user-select: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 32px;
+            min-width: 0;
+        }
+
+        .settings-button:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .settings-button.active {
+            background-color: var(--button-active);
+            border-color: var(--icon-color);
+        }
+
+        .theme-button[data-theme="light"] {
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #cccccc;
+        }
+
+        .theme-button[data-theme="light"].active {
+            background-color: #f0f0f0;
+            border-color: #000000;
+        }
+
+        .theme-button[data-theme="dark"] {
+            background-color: #000000;
+            color: #ffffff;
+            border-color: #333333;
+        }
+
+        .theme-button[data-theme="dark"].active {
+            background-color: #333333;
+            border-color: #ffffff;
+        }
+
+        .github-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 20px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            width: 38px;
+            height: 38px;
+            position: relative;
+        }
+
+        .github-link::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--text-color);
+            transform: scaleX(0);
+            transition: transform 0.2s;
+            border-radius: 2px;
+        }
+
+        .github-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Контент страницы */
+        .container {
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+    max-width: 100%;
+        }
+
+        h1 {
+            font-size: var(--h1-font-size, 2rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .nav-button {
-            display: inline-block;
-            padding: 12px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
             text-decoration: none;
-            color: #333;
-            border: 1px solid rgba(0, 0, 0, 0.3);
+            color: var(--text-color);
+            border: 1px solid var(--button-border);
             background-color: transparent;
             border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 400;
+            font-size: var(--button-font-size, 0.75rem);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 70px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            aspect-ratio: 1 / 1;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--text-color);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid var(--button-border);
+            background-color: transparent;
+            border-radius: 8px;
+            font-size: var(--dropdown-font-size, 0.75rem);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: visible;
+            min-height: 70px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            aspect-ratio: 1 / 1;
+            grid-column: 1;
+        }
+        
+        .dropdown:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--text-color);
+        }
+        
+        .dropdown-toggle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 0;
+            left: -8px;
+            transform: translateX(-100%);
+            background: var(--settings-bg);
+            border: 1px solid var(--settings-border);
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            min-width: 160px;
+            padding: 6px 0;
+            overflow: hidden;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-100%);
+        }
+        
+        .dropdown-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid var(--settings-border);
+            background-color: transparent;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin: 3px 6px;
+            min-height: 38px;
+            line-height: 1.2;
+            width: calc(100% - 12px);
+        }
+        
+        .dropdown-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            border-color: var(--text-color);
+        }
+        
+        .bottom-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--nav-border) 20%, 
+                var(--nav-border) 80%, 
+                transparent 100%);
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        
+        .project-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 25px;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid var(--button-border);
+            background-color: transparent;
+            border-radius: 8px;
+            font-size: var(--project-font-size, 0.8rem);
+            font-weight: 500;
             letter-spacing: 0.5px;
             text-transform: uppercase;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            min-width: 150px;
+            min-height: 45px;
             text-align: center;
             cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
-        .nav-button::before {
+        .project-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--text-color);
+        }
+
+        .mobile-nav-panel {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--nav-bg);
+            border-top: 1px solid var(--nav-border);
+            padding: 10px 15px;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .mobile-nav-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        .mobile-nav-right {
+            display: flex;
+            gap: 15px;
+        }
+
+        .mobile-nav-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--icon-color);
+            position: relative;
+            user-select: none;
+        }
+
+        .mobile-nav-item::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: #333;
-            transition: all 0.4s ease;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: var(--hover-bg);
+            border-radius: 50px;
+            transition: all 0.2s;
+            transform: translate(-50%, -50%);
             z-index: -1;
         }
-        
-        .nav-button:hover {
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-color: rgba(0, 0, 0, 0.7);
+
+        .mobile-nav-item:hover::before {
+            width: 44px;
+            height: 44px;
         }
-        
-        .nav-button:hover::before {
-            left: 0;
+
+        .mobile-nav-icon {
+            font-size: 20px;
+            user-select: none;
         }
-        
-        .nav-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            background-color: #ff4444;
-            border-color: #ff4444;
-        }
-        
-        .nav-button:active::before {
-            background: #ff4444;
+
+        .no-select {
+            user-select: none;
+            pointer-events: none;
         }
         
         @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
+            .nav-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 350px;
+                gap: 10px;
             }
             
-            .nav-button {
-                width: 100%;
-                max-width: 250px;
-                padding: 10px 20px;
+            .bottom-row {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 350px;
+            }
+            
+            .nav-button, .dropdown {
+                min-height: 60px;
+                font-size: 0.7rem;
+                padding: 10px;
+            }
+            
+            .dropdown-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                transform: none;
+                margin-top: 8px;
+                opacity: 1;
+                visibility: visible;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                display: none;
+                border-radius: 8px;
+                min-width: auto;
+            }
+            
+            .dropdown:hover .dropdown-menu {
+                display: block;
+            }
+            
+            .dropdown-button {
+                width: calc(100% - 12px);
+                margin: 3px 6px;
+                font-size: 0.65rem;
+                padding: 8px 10px;
+                min-height: 35px;
             }
             
             h1 {
                 font-size: 1.7rem;
-                margin-bottom: 2rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .top-nav-panel {
+                padding: 15px 15px;
+                height: 65px;
+            }
+
+            .top-nav-content {
+                gap: 12px;
+            }
+
+            .nav-link {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .github-link {
+                font-size: 18px;
+                width: 34px;
+                height: 34px;
+            }
+
+            body {
+                padding-top: 85px;
+            }
+
+            .divider {
+                margin: 15px auto;
+                max-width: 350px;
+            }
+            
+            .project-button {
+                padding: 8px 20px;
+                font-size: 0.75rem;
+                min-height: 40px;
+            }
+
+            .mobile-nav-panel {
+                display: block;
             }
         }
-        
+
         @media (max-width: 480px) {
             body {
                 padding: 15px;
+                padding-top: 85px;
+                padding-bottom: 70px;
             }
             
             h1 {
                 font-size: 1.5rem;
+                margin-bottom: 1rem;
             }
             
-            .nav-button {
-                font-size: 0.85rem;
-                min-width: 130px;
+            .nav-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                max-width: 300px;
+            }
+            
+            .bottom-row {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 300px;
+                gap: 8px;
+            }
+            
+            .nav-button, .dropdown {
+                font-size: 0.65rem;
+                min-height: 55px;
+                padding: 8px;
+            }
+            
+            .dropdown-button {
+                padding: 7px 9px;
+                font-size: 0.6rem;
+                min-height: 32px;
+            }
+
+            .mobile-nav-panel {
+                padding: 8px 12px;
+            }
+
+            .mobile-nav-item, .mobile-theme-toggle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .top-nav-content {
+                gap: 8px;
+            }
+
+            .nav-link {
+                font-size: 11px;
+                padding: 5px 8px;
+                letter-spacing: 0.3px;
+            }
+
+            .github-link {
+                font-size: 16px;
+                width: 30px;
+                height: 30px;
+            }
+
+            .divider {
+                margin: 12px auto;
+                max-width: 300px;
+            }
+            
+            .project-button {
+                padding: 7px 18px;
+                font-size: 0.7rem;
+                min-height: 38px;
             }
         }
+        
     </style>
 </head>
 
-<body>
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Верхняя навигационная панель -->
+    <nav class="top-nav-panel">
+        <div class="top-nav-content">
+            <div class="nav-link" id="homeLink">ГЛАВНАЯ СТРАНИЦА</div>
+            <div class="nav-link strikethrough">ОБО МНЕ</div>
+            <div class="settings-dropdown">
+                <div class="nav-link" id="settingsToggle">НАСТРОЙКИ</div>
+                <div class="settings-menu">
+                    <div class="settings-section">
+                        <div class="settings-section-title">Тема</div>
+                        <div class="settings-buttons-row">
+                            <div class="settings-button theme-button active" data-theme="auto">Авто</div>
+                            <div class="settings-button theme-button" data-theme="light">Белая</div>
+                            <div class="settings-button theme-button" data-theme="dark">Тёмная</div>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <div class="settings-section-title">Текст</div>
+                        <div class="settings-buttons-row">
+                            <div class="settings-button" data-font-size="small">Мелкий</div>
+                            <div class="settings-button active" data-font-size="standard">Стандартный</div>
+                            <div class="settings-button" data-font-size="large">Крупный</div>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+    <div class="settings-section-title">Ширина</div>
+    <div class="settings-buttons-row">
+        <div class="settings-button active" data-container-width="standard">Стандартный</div>
+        <div class="settings-button" data-container-width="wide">Широкий</div>
+    </div>
+</div>
+                </div>
+            </div>
+            <a href="https://github.com/DMIX76" class="github-link" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Контент страницы -->
     <div class="container">
-        <h1>Сайт Севрикова Матвея ИС-3.1</h1>
-        
-        <div class="nav-container">
+        <h1>Добро пожаловать на сайт Севрикова Матвея гр. ИС-3.1</h1>
+        <div class="nav-grid">
             <a href="First Script/first.html" class="nav-button">Первый скрипт</a>
             <a href="Guess The Number Game/guess.html" class="nav-button">Игра: угадай число</a>
-            <a href="Computer Science Test/index.html" class="nav-button">Тест по информатике</a>
-            <a href="4.html" class="nav-button">Работа 4 (скоро)</a>
-            <a href="5.html" class="nav-button">Работа 5 (скоро)</a>
-            <a href="6.html" class="nav-button">Работа 6 (скоро)</a>
+            <a href="Computer Science Test/test.html" class="nav-button">Тест: Информатика</a>
+            <a href="Music Table/music.html" class="nav-button">Таблица: Музыка</a>
         </div>
+        <div class="bottom-row">
+            <div class="dropdown">
+                <div class="dropdown-toggle">Доп. задания (Рафаэль)</div>
+                <div class="dropdown-menu">
+                    <a href="Raphael/index1.html" class="dropdown-button">Улыбающийся смайлик</a>
+                    <a href="Raphael/index2.html" class="dropdown-button">Прыгающий кружок</a>
+                    <a href="Raphael/index3.html" class="dropdown-button">График</a>
+                </div>
+            </div>
+            <a href="Guess The Character/guess2.html" class="nav-button">Игра: Угадай персонажа</a>
+            <a href="#" class="nav-button">Скоро...</a>
+        </div>
+        <div class="divider"></div>
+        <a href="6.html" class="project-button">Проект (скоро)</a>
     </div>
+
+    <!-- Мобильная навигационная панель -->
+    <nav class="mobile-nav-panel">
+        <div class="mobile-nav-content">
+            <div class="mobile-nav-left">
+                <div class="mobile-nav-item" title="Настройки">
+                    <div class="mobile-nav-icon no-select">⚙️</div>
+                </div>
+            </div>
+            <div class="mobile-nav-right">
+                <div class="mobile-nav-item" title="Вернуться на заглавную страницу">
+                    <div class="mobile-nav-icon no-select">🏠</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        const body = document.body;
+        const settingsToggle = document.getElementById('settingsToggle');
+        const settingsDropdown = document.querySelector('.settings-dropdown');
+        const homeLink = document.getElementById('homeLink');
+        
+        // Функция для применения темы "Авто"
+        function applyAutoTheme() {
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            body.setAttribute('data-theme', systemTheme);
+        }
+        
+        // Установка начальных настроек
+        function setInitialSettings() {
+            const savedTheme = localStorage.getItem('theme') || 'auto';
+            const savedFontSize = localStorage.getItem('fontSize') || 'standard';
+            const savedContainerWidth = localStorage.getItem('containerWidth') || 'standard';
+            
+            // Применяем тему
+            if (savedTheme === 'auto') {
+                applyAutoTheme();
+            } else {
+                body.setAttribute('data-theme', savedTheme);
+            }
+            
+            body.setAttribute('data-font-size', savedFontSize);
+            body.setAttribute('data-container-width', savedContainerWidth);
+            
+            // Активируем соответствующие кнопки
+            document.querySelectorAll('.settings-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeThemeBtn = document.querySelector(`.theme-button[data-theme="${savedTheme}"]`);
+            const activeFontBtn = document.querySelector(`.settings-button[data-font-size="${savedFontSize}"]`);
+            const activeWidthBtn = document.querySelector(`.settings-button[data-container-width="${savedContainerWidth}"]`);
+            
+            if (activeThemeBtn) activeThemeBtn.classList.add('active');
+            if (activeFontBtn) activeFontBtn.classList.add('active');
+            if (activeWidthBtn) activeWidthBtn.classList.add('active');
+        }
+        
+        // Устанавливаем начальные настройки
+        setInitialSettings();
+        
+        // Обработчик для кнопки "ГЛАВНАЯ СТРАНИЦА"
+homeLink.addEventListener('click', () => {
+    // Прокрутка к верху страницы с плавной анимацией
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Обработчик открытия/закрытия меню настроек
+        settingsToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!settingsDropdown.contains(e.target)) {
+                settingsDropdown.classList.remove('active');
+            }
+        });
+
+        // Обработчики для всех кнопок настроек
+        document.querySelectorAll('.settings-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const theme = button.getAttribute('data-theme');
+                const fontSize = button.getAttribute('data-font-size');
+                const containerWidth = button.getAttribute('data-container-width');
+                
+                console.log('Button clicked:', {theme, fontSize, containerWidth});
+                
+                if (theme) {
+                    // Обработка темы
+                    document.querySelectorAll('.theme-button').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    if (theme === 'auto') {
+                        applyAutoTheme();
+                    } else {
+                        body.setAttribute('data-theme', theme);
+                    }
+                    localStorage.setItem('theme', theme);
+                }
+                
+                if (fontSize) {
+                    // Обработка размера текста
+                    document.querySelectorAll('.settings-button[data-font-size]').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    body.setAttribute('data-font-size', fontSize);
+                    localStorage.setItem('fontSize', fontSize);
+                }
+                
+                if (containerWidth) {
+                    // Обработка ширины
+                    document.querySelectorAll('.settings-button[data-container-width]').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    body.setAttribute('data-container-width', containerWidth);
+                    localStorage.setItem('containerWidth', containerWidth);
+                    
+                    console.log('Container width set to:', containerWidth);
+                    console.log('Body attribute:', body.getAttribute('data-container-width'));
+                }
+            });
+        });
+
+        // Слушатель изменений системной темы (для режима "Авто")
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (localStorage.getItem('theme') === 'auto') {
+                applyAutoTheme();
+            }
+        });
+    </script>
 </body>
 </html>

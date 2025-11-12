@@ -1,0 +1,432 @@
+/* common.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --nav-bg: #ffffff;
+    --nav-border: #e0e0e0;
+    --icon-color: #333333;
+    --hover-bg: rgba(0, 0, 0, 0.03);
+    --settings-bg: #ffffff;
+    --settings-border: #e0e0e0;
+    --button-bg: #f5f5f5;
+    --button-active: #e0e0e0;
+    --button-border: #e0e0e0;
+}
+
+[data-theme="dark"] {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --nav-bg: #000000;
+    --nav-border: #333333;
+    --icon-color: #cccccc;
+    --hover-bg: rgba(255, 255, 255, 0.03);
+    --settings-bg: #1a1a1a;
+    --settings-border: #333333;
+    --button-bg: #2a2a2a;
+    --button-active: #3a3a3a;
+    --button-border: #444444;
+}
+
+/* Стили для размера текста */
+[data-font-size="small"] {
+    --body-font-size: 0.85rem;
+    --h1-font-size: 1.6rem;
+    --nav-link-font-size: 12px;
+    --button-font-size: 0.7rem;
+    --dropdown-font-size: 0.7rem;
+    --project-font-size: 0.75rem;
+    --settings-font-size: 10px;
+}
+
+[data-font-size="standard"] {
+    --body-font-size: 1rem;
+    --h1-font-size: 2rem;
+    --nav-link-font-size: 14px;
+    --button-font-size: 0.75rem;
+    --dropdown-font-size: 0.75rem;
+    --project-font-size: 0.8rem;
+    --settings-font-size: 11px;
+}
+
+[data-font-size="large"] {
+    --body-font-size: 1.15rem;
+    --h1-font-size: 2.4rem;
+    --nav-link-font-size: 16px;
+    --button-font-size: 0.75rem;
+    --dropdown-font-size: 0.75rem;
+    --project-font-size: 0.8rem;
+    --settings-font-size: 12px;
+}
+
+/* Стили для ширины */
+body[data-container-width="standard"] {
+    max-width: 100%;
+}
+
+body[data-container-width="wide"] {
+    max-width: 1400px;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+    padding-top: 100px;
+    padding-bottom: 80px;
+    font-size: var(--body-font-size, 1rem);
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Стили верхней панели */
+.top-nav-panel {
+    width: 100%;
+    background-color: var(--nav-bg);
+    border-bottom: 1px solid var(--nav-border);
+    display: flex;
+    align-items: center;
+    padding: 20px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 70px;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.top-nav-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 15px;
+    position: relative;
+}
+
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: var(--nav-link-font-size, 14px);
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--text-color);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+    border-radius: 2px;
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+.settings-dropdown.active .nav-link::after {
+    transform: scaleX(1);
+}
+
+.nav-link.strikethrough {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+/* Выпадающее меню настроек */
+.settings-dropdown {
+    position: relative;
+}
+
+.settings-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--settings-bg);
+    border: 1px solid var(--settings-border);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    min-width: 260px;
+    padding: 16px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.settings-dropdown.active .settings-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+.settings-section {
+    margin-bottom: 20px;
+}
+
+.settings-section:last-child {
+    margin-bottom: 0;
+}
+
+.settings-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+    user-select: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.settings-buttons-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.settings-button {
+    flex: 1;
+    padding: 8px 4px;
+    border: 1px solid var(--settings-border);
+    background-color: transparent;
+    color: var(--text-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: var(--settings-font-size, 11px);
+    text-align: center;
+    transition: all 0.2s;
+    user-select: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    min-width: 0;
+}
+
+.settings-button:hover {
+    background-color: var(--hover-bg);
+}
+
+.settings-button.active {
+    background-color: var(--button-active);
+    border-color: var(--icon-color);
+}
+
+.theme-button[data-theme="light"] {
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #cccccc;
+}
+
+.theme-button[data-theme="light"].active {
+    background-color: #f0f0f0;
+    border-color: #000000;
+}
+
+.theme-button[data-theme="dark"] {
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #333333;
+}
+
+.theme-button[data-theme="dark"].active {
+    background-color: #333333;
+    border-color: #ffffff;
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    width: 38px;
+    height: 38px;
+    position: relative;
+}
+
+.github-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--text-color);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+    border-radius: 2px;
+}
+
+.github-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* Мобильная навигационная панель */
+.mobile-nav-panel {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--nav-bg);
+    border-top: 1px solid var(--nav-border);
+    padding: 10px 15px;
+    z-index: 100;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.mobile-nav-left {
+    display: flex;
+    gap: 15px;
+}
+
+.mobile-nav-right {
+    display: flex;
+    gap: 15px;
+}
+
+.mobile-nav-item {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--icon-color);
+    position: relative;
+    user-select: none;
+}
+
+.mobile-nav-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: var(--hover-bg);
+    border-radius: 50px;
+    transition: all 0.2s;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.mobile-nav-item:hover::before {
+    width: 44px;
+    height: 44px;
+}
+
+.mobile-nav-icon {
+    font-size: 20px;
+    user-select: none;
+}
+
+.no-select {
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .top-nav-panel {
+        padding: 15px 15px;
+        height: 65px;
+    }
+
+    .top-nav-content {
+        gap: 12px;
+    }
+
+    .nav-link {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+
+    .github-link {
+        font-size: 18px;
+        width: 34px;
+        height: 34px;
+    }
+
+    body {
+        padding-top: 85px;
+    }
+
+    .mobile-nav-panel {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+        padding-top: 85px;
+        padding-bottom: 70px;
+    }
+
+    .top-nav-content {
+        gap: 8px;
+    }
+
+    .nav-link {
+        font-size: 11px;
+        padding: 5px 8px;
+        letter-spacing: 0.3px;
+    }
+
+    .github-link {
+        font-size: 16px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .mobile-nav-panel {
+        padding: 8px 12px;
+    }
+
+    .mobile-nav-item, .mobile-theme-toggle {
+        width: 40px;
+        height: 40px;
+    }
+}

@@ -1,32 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Севриков Матвей ИС-3.1</title>
+    <title>Прыгающий кружок | Севриков Матвей ИС-3.1</title>
+    <link rel="stylesheet" href="../common.css">
+    <style>
+        .container {
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+            max-width: 100%;
+        }
 
-    <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js">
-</script>
-
+        h1 {
+            font-size: var(--h1-font-size, 2rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .task-container {
+            margin-top: 20px;
+        }
+        
+        #canvas {
+            border: 2px solid var(--button-border);
+            border-radius: 10px;
+            background-color: var(--bg-color);
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        
+        .description {
+            margin-bottom: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .instructions {
+            margin-top: 15px;
+            font-style: italic;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js"></script>
 </head>
-<body>
-    
-    <div id="canvas"></div>
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Верхняя панель загрузится автоматически через navbar.js -->
+
+    <div class="container">
+        <h1>Прыгающий кружок</h1>
+        <div class="task-container">
+            <div class="description">
+                <p>Анимированный кружок, который прыгает при клике</p>
+            </div>
+            
+            <div id="canvas"></div>
+            <div class="instructions">Кликните на кружок, чтобы он прыгнул в случайное место</div>
+        </div>
+    </div>
 
     <script>
-    var paper = Raphael("canvas", 400, 400);
+        // Ждем загрузки DOM и навигации
+        document.addEventListener('DOMContentLoaded', function() {
+            var paper = Raphael("canvas", 400, 400);
 
-var ball = paper.circle(50, 50, 20);
-ball.attr({fill: "red"});
+            var ball = paper.circle(50, 50, 20);
+            ball.attr({fill: "red"});
 
-// Анимируем изменение атрибутов cx, cy и r
-ball.animate({cx: 350, cy: 350, r: 40}, 2000, "ease-in-out");
+            // Анимируем изменение атрибутов cx, cy и r
+            ball.animate({cx: 350, cy: 350, r: 40}, 2000, "ease-in-out");
 
-ball.node,onclick = () => {
-    x = Math.floor(Math.random()* 550);
-    y = Math.floor(Math.random()* 550);
-    ball.animate({cx: x, cy: y, r: 40}, 2000, "ease-in-out");
-}
+            // Исправленная строка - было ball.node,onclick, должно быть ball.node.onclick
+            ball.node.onclick = () => {
+                var x = Math.floor(Math.random() * 350) + 25;
+                var y = Math.floor(Math.random() * 350) + 25;
+                ball.animate({cx: x, cy: y, r: 40}, 1000, "bounce");
+            }
+        });
     </script>
+
+    <script src="../navbar.js"></script>
 </body>
 </html>

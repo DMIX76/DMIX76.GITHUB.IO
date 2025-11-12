@@ -1,15 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Севриков Матвей ИС-3.1</title>
+    <title>Первый скрипт | Севриков Матвей ИС-3.1</title>
+    <link rel="stylesheet" href="../common.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .script-result {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid var(--button-border);
+            border-radius: 8px;
+            background-color: var(--button-bg);
+            max-width: 500px;
+        }
+    </style>
 </head>
-<body>
-    <script>
-        n=+prompt('input number1:');
-        a=+prompt('input number2:');
-        alert(n+a)
-    </script>
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Верхняя панель загрузится автоматически через navbar.js -->
+
+    <div class="container">
+        <h1>Первый скрипт</h1>
+        <p>Скрипт запрашивает два числа и показывает их сумму</p>
+        
+        <div class="script-result">
+            <p>Результат работы скрипта:</p>
+            <script>
+                n = +prompt('Введите первое число:');
+                a = +prompt('Введите второе число:');
+                document.write(n + ' + ' + a + ' = ' + (n + a));
+            </script>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <button onclick="location.reload()" style="
+                padding: 10px 20px;
+                background-color: var(--button-bg);
+                border: 1px solid var(--button-border);
+                border-radius: 6px;
+                color: var(--text-color);
+                cursor: pointer;
+            ">Запустить снова</button>
+        </div>
+    </div>
+
+    <script src="../navbar.js"></script>
 </body>
 </html>

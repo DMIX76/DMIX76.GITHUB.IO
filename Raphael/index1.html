@@ -1,34 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Севриков Матвей ИС-3.1</title>
+    <title>Улыбающийся смайлик | Севриков Матвей ИС-3.1</title>
+    <link rel="stylesheet" href="../common.css">
+    <style>
+        .container {
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+            max-width: 100%;
+        }
 
-    <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js">
-</script>
-
+        h1 {
+            font-size: var(--h1-font-size, 2rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .task-container {
+            margin-top: 20px;
+        }
+        
+        #canvas {
+            border: 2px solid var(--button-border);
+            border-radius: 10px;
+            background-color: var(--bg-color);
+            margin: 20px 0;
+        }
+        
+        .description {
+            margin-bottom: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js"></script>
 </head>
-<body>
-    
-    <div id="canvas"></div>
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Верхняя панель загрузится автоматически через navbar.js -->
+
+    <div class="container">
+        <h1>Улыбающийся смайлик</h1>
+        <div class="task-container">
+            <div class="description">
+                <p>Анимированный смайлик созданный с помощью библиотеки Raphael.js</p>
+            </div>
+            
+            <div id="canvas"></div>
+        </div>
+    </div>
 
     <script>
-        var paper = Raphael("canvas", 400, 400); // предполагается, что есть <div id="canvas"></div>
+        // Ждем загрузки DOM и навигации
+        document.addEventListener('DOMContentLoaded', function() {
+            var paper = Raphael("canvas", 400, 400);
 
-// Голова
-var head = paper.circle(200, 200, 100);
-head.attr({fill: "#ffeb3b", stroke: "#000", "stroke-width": 2});
+            // Голова
+            var head = paper.circle(200, 200, 100);
+            head.attr({fill: "#ffeb3b", stroke: "#000", "stroke-width": 2});
 
-// Глаза
-var eye1 = paper.circle(160, 160, 15);
-var eye2 = paper.circle(240, 160, 15);
-eye1.attr({fill: "#000"});
-eye2.attr({fill: "#000"});
+            // Глаза
+            var eye1 = paper.circle(160, 160, 15);
+            var eye2 = paper.circle(240, 160, 15);
+            eye1.attr({fill: "#000"});
+            eye2.attr({fill: "#000"});
 
-// Улыбка (используем путь)
-var smile = paper.path("M150,240 Q200,280 250,240");
-smile.attr({stroke: "#000", "stroke-width": 3});
+            // Улыбка (используем путь)
+            var smile = paper.path("M150,240 Q200,280 250,240");
+            smile.attr({stroke: "#000", "stroke-width": 3});
+        });
     </script>
+
+    <script src="../navbar.js"></script>
 </body>
 </html>

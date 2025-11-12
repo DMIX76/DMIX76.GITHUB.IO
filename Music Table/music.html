@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Текст песни | Севриков Матвей ИС-3.1</title>
+    <link rel="stylesheet" href="../common.css">
+    <style>
+        .container {
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+            max-width: 100%;
+            padding-top: 20px;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--bg-color);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--button-border);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            gap: 30px;
+            background: linear-gradient(135deg, #a83232 0%, #c44545 50%, #d65c5c 100%);
+            padding: 25px;
+            border-radius: 10px;
+            color: white;
+            position: relative;
+        }
+        
+        .album-cover {
+            flex-shrink: 0;
+        }
+        
+        .album-cover img {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .song-info {
+            flex-grow: 1;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+        }
+        
+        h1 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+        
+        .artist {
+            color: #FFB6C1;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .album-details {
+            color: #FFDAB9;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .album-details strong {
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+        
+        .release-date {
+            color: #ffffff;
+            font-size: 14px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .calendar-emoji {
+            font-size: 14px;
+        }
+        
+        .track-info {
+            color: #FFDAB9;
+            font-size: 14px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .highlightable {
+            text-decoration: underline;
+            text-decoration-color: #ffffff;
+            cursor: help;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .highlightable:hover {
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        
+        .info-tooltip {
+            display: none;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.4;
+            width: 280px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid #ffffff;
+        }
+        
+        .tooltip-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .tooltip-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            flex-shrink: 0;
+            background: #666;
+        }
+        
+        .tooltip-text {
+            flex: 1;
+        }
+        
+        .highlightable:hover .info-tooltip {
+            display: block;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 10px;
+        }
+        
+        .video-side {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .video-caption {
+            color: #FFDAB9;
+            font-size: 11px;
+            text-align: center;
+            margin-bottom: 8px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        
+        video {
+            width: 250px;
+            height: 250px;
+            border-radius: 6px;
+            border: 2px solid #ffffff;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+        
+        th {
+            background-color: var(--button-bg);
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--button-border);
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        td {
+            padding: 15px;
+            border: 1px solid var(--button-border);
+            vertical-align: top;
+            line-height: 1.6;
+            text-align: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .english {
+            width: 50%;
+        }
+        
+        .russian {
+            width: 50%;
+        }
+        
+        .section-label {
+            font-style: italic;
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        /* Новые стили для расположения */
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .main-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+
+        .album-meta {
+            margin-top: 15px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .main-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .album-cover img {
+                width: 150px;
+                height: 150px;
+            }
+            
+            video {
+                width: 200px;
+                height: 200px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .artist {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                padding-top: 85px;
+                padding-bottom: 70px;
+            }
+            
+            .content-wrapper {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .album-cover img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            video {
+                width: 150px;
+                height: 150px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .artist {
+                font-size: 1rem;
+            }
+            
+            td {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Верхняя панель загрузится автоматически через navbar.js -->
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="header">
+                <div class="album-cover">
+                    <img src="Pictures/Dead_Mans_Party_album.jpg" 
+                         alt="Обложка альбома Dead Man's Party">
+                </div>
+                <div class="song-info">
+                    <div class="header-content">
+                        <div class="main-info">
+                            <div class="text-content">
+                                <h1>Dead Man's Party</h1>
+                                <div class="artist">
+                                    <span class="highlightable">Oingo Boingo
+                                        <div class="info-tooltip">
+                                            <div class="tooltip-content">
+                                                <img src="Pictures/Oingo_Boingo.jpg" alt="Oingo Boingo" class="tooltip-photo">
+                                                <div class="tooltip-text">
+                                                    <strong>Oingo Boingo</strong><br>
+                                                    Американская нью-вейв/ска/арт-рок-группа, основанная в 1972 году. Известна своим уникальным звучанием и театральными выступлениями. Группа распалась в 1995 году.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                                
+                                <div class="album-meta">
+                                    <div class="album-details">
+                                        <strong>Продюсеры:</strong> 
+                                        <span class="highlightable">Джон Авила
+                                            <div class="info-tooltip">
+                                                <div class="tooltip-content">
+                                                    <img src="Pictures/John_Avila.jpg" alt="John Avila" class="tooltip-photo">
+                                                    <div class="tooltip-text">
+                                                        <strong>John Avila</strong><br>
+                                                        Американский музыкант, бас-гитарист и продюсер. Участвовал в создании многих хитов Oingo Boingo.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span> , 
+                                        <span class="highlightable">Дэнни Эльфман
+                                            <div class="info-tooltip">
+                                                <div class="tooltip-content">
+                                                    <img src="Pictures/Danny_Elfman.png" alt="Danny Elfman" class="tooltip-photo">
+                                                    <div class="tooltip-text">
+                                                        <strong>Danny Elfman</strong><br>
+                                                        Daniel Robert "Danny" Elfman - американский композитор, певец, автор песен и продюсер. Основатель Oingo Boingo, позже стал известен как кинокомпозитор (фильмы Тима Бёртона).
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span> , 
+                                        <span class="highlightable">Стив Бартек
+                                            <div class="info-tooltip">
+                                                <div class="tooltip-content">
+                                                    <img src="Pictures/Steve_Bartek.jpg" alt="Steve Bartek" class="tooltip-photo">
+                                                    <div class="tooltip-text">
+                                                        <strong>Steve Bartek</strong><br>
+                                                        Американский гитарист, аранжировщик и композитор. Участвовал в создании музыки для многих фильмов и телешоу.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="track-info">
+                                        <em>Третий сингл и Пятый студийный альбом</em>
+                                    </div>
+                                    
+                                    <div class="release-date">
+                                        <span class="calendar-emoji">📅</span>28 окт. 1985 г.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="video-side">
+                                <div class="video-caption">
+                                    Фанатское видео
+                                </div>
+                                <video controls>
+                                    <source src="Pictures/video_2025-11-08_21-36-36.mp4" type="video/mp4">
+                                    Ваш браузер не поддерживает видео тег.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таблица с текстом песни -->
+            <table>
+                <tr>
+                    <th>Original English</th>
+                    <th>Russian Translation</th>
+                </tr>
+                
+                <!-- Intro -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Intro]</div>
+                        Yeah, yeah, let 'em in
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Вступление]</div>
+                        Да, да, впусти их
+                    </td>
+                </tr>
+                
+                <!-- Verse 1 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Verse 1]</div>
+                        I'm all dressed up with nowhere to go<br>
+                        Walkin' with a dead man over my shoulder<br>
+                        I'm all dressed up with nowhere to go<br>
+                        Walkin' with a dead man over my shoulder
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Куплет 1]</div>
+                        Я весь одетый, но идти некуда<br>
+                        Иду с мертвецом за плечом<br>
+                        Я весь одетый, но идти некуда<br>
+                        Иду с мертвецом за плечом
+                    </td>
+                </tr>
+                
+                <!-- Verse 2 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Verse 2]</div>
+                        Waitin' for an invitation to arrive<br>
+                        Goin' to a party where no one's still alive<br>
+                        Waitin' for an invitation to arrive<br>
+                        Goin' to a party where no one's still alive
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Куплет 2]</div>
+                        Жду, когда приглашение придет<br>
+                        Иду на вечеринку, где никто не живой<br>
+                        Жду, когда приглашение придет<br>
+                        Иду на вечеринку, где никто не живой
+                    </td>
+                </tr>
+                
+                <!-- Chorus -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Chorus]</div>
+                        I was struck by lightning, walkin' down the street<br>
+                        I was hit by somethin' last night in my sleep<br>
+                        It's a dead man's party, who could ask for more?<br>
+                        Everybody's comin', leave your body at the door<br>
+                        Leave your body and soul at the door
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Припев]</div>
+                        Меня ударила молния, когда я шел по улице<br>
+                        Меня поразило что-то прошлой ночью во сне<br>
+                        Это вечеринка мертвецов, кто может желать большего?<br>
+                        Все приходят, оставь свое тело у двери<br>
+                        Оставь свое тело и душу у двери
+                    </td>
+                </tr>
+                
+                <!-- Post-Chorus -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Post-Chorus]</div>
+                        Don't run away, it's only me<br>
+                        Only me
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Послеприпев]</div>
+                        Не убегай, это всего лишь я<br>
+                        Всего лишь я
+                    </td>
+                </tr>
+                
+                <!-- Verse 3 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Verse 3]</div>
+                        I'm all dressed up with nowhere to go<br>
+                        Walkin' with a dead man, with a dead man<br>
+                        Waitin' for an invitation to arrive<br>
+                        Walkin' with a dead man, with a dead man
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Куплет 3]</div>
+                        Я весь одетый, но идти некуда<br>
+                        Иду с мертвецом, с мертвецом<br>
+                        Жду, когда приглашение придет<br>
+                        Иду с мертвецом, с мертвецом
+                    </td>
+                </tr>
+                
+                <!-- Verse 4 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Verse 4]</div>
+                        I got my best suit and my tie<br>
+                        Shiny silver dollar on either eye<br>
+                        I hear the chauffeur comin' to my door<br>
+                        Says there's room for maybe just one more
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Куплет 4]</div>
+                        На мне мой лучший костюм и галстук<br>
+                        Блестящие серебряные доллары на глазах<br>
+                        Слышу, как шофер подъезжает к моей двери<br>
+                        Говорит, что есть место, может быть, еще для одного
+                    </td>
+                </tr>
+                
+                <!-- Chorus 2 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Chorus]</div>
+                        I was struck by lightning, walkin' down the street<br>
+                        I was hit by somethin' last night in my sleep<br>
+                        It's a dead man's party, who could ask for more?<br>
+                        Everybody's comin', leave your body at the door<br>
+                        Leave your body and soul at the door
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Припев]</div>
+                        Меня ударила молния, когда я шел по улице<br>
+                        Меня поразило что-то прошлой ночью во сне<br>
+                        Это вечеринка мертвецов, кто может желать большего?<br>
+                        Все приходят, оставь свое тело у двери<br>
+                        Оставь свое тело и душу у двери
+                    </td>
+                </tr>
+                
+                <!-- Post-Chorus 2 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Post-Chorus]</div>
+                        Don't run away, it's only me<br>
+                        Don't be afraid of what you can't see<br>
+                        Don't run away, it's only me<br>
+                        Don't be afraid of what you can't see<br>
+                        (It's only me)
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Послеприпев]</div>
+                        Не убегай, это всего лишь я<br>
+                        Не бойся того, что не можешь видеть<br>
+                        Не убегай, это всего лишь я<br>
+                        Не бойся того, что не можешь видеть<br>
+                        (Это всего лишь я)
+                    </td>
+                </tr>
+                
+                <!-- Chorus 3 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Chorus]</div>
+                        I was struck by lightning, walkin' down the street<br>
+                        I was hit by somethin' last night in my sleep<br>
+                        It's a dead man's party, who could ask for more?<br>
+                        Everybody's comin', leave your body at the door<br>
+                        Leave your body and soul at the door
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Припев]</div>
+                        Меня ударила молния, когда я шел по улице<br>
+                        Меня поразило что-то прошлой ночью во сне<br>
+                        Это вечеринка мертвецов, кто может желать большего?<br>
+                        Все приходят, оставь свое тело у двери<br>
+                        Оставь свое тело и душу у двери
+                    </td>
+                </tr>
+                
+                <!-- Post-Chorus 3 -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Post-Chorus]</div>
+                        Don't run away, it's only me<br>
+                        Don't be afraid of what you can't see<br>
+                        Don't run away, it's only me<br>
+                        Don't be afraid of what you can't see
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Послеприпев]</div>
+                        Не убегай, это всего лишь я<br>
+                        Не бойся того, что не можешь видеть<br>
+                        Не убегай, это всего лишь я<br>
+                        Не бойся того, что не можешь видеть
+                    </td>
+                </tr>
+                
+                <!-- Outro -->
+                <tr>
+                    <td class="english">
+                        <div class="section-label">[Outro]</div>
+                        It's only me<br>
+                        It's only me<br>
+                        Only me<br>
+                        It's only me<br>
+                        It's only me<br>
+                        Only me<br>
+                        It's only me<br>
+                        It's only me<br>
+                        Only me<br>
+                        Ow!
+                    </td>
+                    <td class="russian">
+                        <div class="section-label">[Завершение]</div>
+                        Это всего лишь я<br>
+                        Это всего лишь я<br>
+                        Всего лишь я<br>
+                        Это всего лишь я<br>
+                        Это всего лишь я<br>
+                        Всего лишь я<br>
+                        Это всего лишь я<br>
+                        Это всего лишь я<br>
+                        Всего лишь я<br>
+                        Оу!
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script src="../navbar.js"></script>
+</body>
+</html>

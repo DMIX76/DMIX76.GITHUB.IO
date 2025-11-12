@@ -1,49 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Севриков Матвей ИС-3.1</title>
+    <title>График функции | Севриков Матвей ИС-3.1</title>
+    <link rel="stylesheet" href="../common.css">
+    <style>
+        .container {
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+            max-width: 100%;
+        }
 
-    <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js">
-</script>
-
+        h1 {
+            font-size: var(--h1-font-size, 2rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .task-container {
+            margin-top: 20px;
+        }
+        
+        #canvas {
+            border: 2px solid var(--button-border);
+            border-radius: 10px;
+            background-color: var(--bg-color);
+            margin: 20px 0;
+        }
+        
+        .description {
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .function-info {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: var(--button-bg);
+            border-radius: 6px;
+            border: 1px solid var(--button-border);
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js"></script>
 </head>
-<body>
-    
-    <div id="canvas"></div>
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Верхняя панель загрузится автоматически через navbar.js -->
+
+    <div class="container">
+        <h1>График функции</h1>
+        <div class="task-container">
+            <div class="description">
+                <p>График функции y = x² построенный с помощью библиотеки Raphael.js</p>
+            </div>
+            
+            <div id="canvas"></div>
+            <div class="function-info">
+                <strong>Функция:</strong> y = x² (парабола)
+            </div>
+        </div>
+    </div>
 
     <script>
-        var paper = Raphael("canvas", 600, 400);
-var width = 600, height = 400;
+        // Ждем загрузки DOM и навигации
+        document.addEventListener('DOMContentLoaded', function() {
+            var paper = Raphael("canvas", 600, 400);
+            var width = 600, height = 400;
 
-// Функция для масштабирования математической координаты X в пиксельную
-function scaleX(x) { return width / 2 + x * 30; }
-// Функция для масштабирования математической координаты Y в пиксельную (ось Y инвертирована)
-function scaleY(y) { return height / 2 - y * 30; }
+            // Функция для масштабирования математической координаты X в пиксельную
+            function scaleX(x) { return width / 2 + x * 30; }
+            // Функция для масштабирования математической координаты Y в пиксельную (ось Y инвертирована)
+            function scaleY(y) { return height / 2 - y * 30; }
 
-// Рисуем оси
-paper.path("M" + scaleX(-10) + "," + scaleY(0) + "L" + scaleX(10) + "," + scaleY(0)) // Ось X
-      .attr({stroke: "#000"});
-paper.path("M" + scaleX(0) + "," + scaleY(-10) + "L" + scaleX(0) + "," + scaleY(10)) // Ось Y
-      .attr({stroke: "#000"});
+            // Рисуем оси
+            paper.path("M" + scaleX(-10) + "," + scaleY(0) + "L" + scaleX(10) + "," + scaleY(0)) // Ось X
+                  .attr({stroke: "#000"});
+            paper.path("M" + scaleX(0) + "," + scaleY(-10) + "L" + scaleX(0) + "," + scaleY(10)) // Ось Y
+                  .attr({stroke: "#000"});
 
-// Генерируем путь для графика y = x^2
-var pathString = "";
-for (var x = -5; x <= 5; x += 0.1) {
-    var y = x * x;
-    var px = scaleX(x);
-    var py = scaleY(y);
-    if (x === -5) {
-        pathString += "M " + px + "," + py;
-    } else {
-        pathString += " L " + px + "," + py;
-    }
-}
+            // Генерируем путь для графика y = x^2
+            var pathString = "";
+            for (var x = -5; x <= 5; x += 0.1) {
+                var y = x * x;
+                var px = scaleX(x);
+                var py = scaleY(y);
+                if (x === -5) {
+                    pathString += "M " + px + "," + py;
+                } else {
+                    pathString += " L " + px + "," + py;
+                }
+            }
 
-// Рисуем график
-var graph = paper.path(pathString);
-graph.attr({stroke: "#e91e63", "stroke-width": 2});
+            // Рисуем график
+            var graph = paper.path(pathString);
+            graph.attr({stroke: "#e91e63", "stroke-width": 2});
+        });
     </script>
+
+    <script src="../navbar.js"></script>
 </body>
 </html>

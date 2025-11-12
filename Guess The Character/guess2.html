@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра: Угадай персонажа | Севриков Матвей ИС-3.1</title>
+    <link rel="stylesheet" href="../common.css">
+    <style>
+        /* Стили для игры */
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .game-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: var(--h1-font-size, 2rem);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .difficulty-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .game-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid var(--button-border);
+            background-color: transparent;
+            border-radius: 8px;
+            font-size: var(--button-font-size, 0.75rem);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            min-height: 50px;
+        }
+
+        .game-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--text-color);
+        }
+
+        .character-image {
+            width: 280px;
+            height: 280px;
+            margin: 20px auto;
+            border: 1px solid var(--button-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .character-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .character-image-content {
+            position: absolute;
+            z-index: 2;
+            background: rgba(0,0,0,0.7);
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            text-align: center;
+            font-size: var(--body-font-size, 1rem);
+        }
+
+        .hint {
+            background: var(--button-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px auto;
+            max-width: 600px;
+            border-left: 4px solid var(--text-color);
+            font-size: var(--body-font-size, 1rem);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            line-height: 1.5;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        .answer-button {
+            padding: 15px;
+            border: 1px solid var(--button-border);
+            background-color: transparent;
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: var(--button-font-size, 0.75rem);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .answer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--text-color);
+        }
+
+        .progress {
+            text-align: center;
+            margin: 20px 0;
+            font-size: var(--body-font-size, 1rem);
+            font-weight: 500;
+            padding: 10px;
+            background: var(--button-bg);
+            border-radius: 6px;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .results-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .score-display {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.4em;
+            font-weight: 500;
+            padding: 15px;
+            background: var(--button-bg);
+            border-radius: 8px;
+            border: 1px solid var(--button-border);
+        }
+
+        .grade-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 500;
+            border: 1px solid var(--button-border);
+            background-color: var(--button-bg);
+            line-height: 1.4;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .result-item {
+            background: var(--button-bg);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--button-border);
+            transition: all 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-correct {
+            border-left: 4px solid #2ecc71;
+        }
+
+        .result-incorrect {
+            border-left: 4px solid #e74c3c;
+        }
+
+        .result-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid var(--button-border);
+        }
+
+        .result-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .result-image-content {
+            position: absolute;
+            z-index: 2;
+            background: rgba(0,0,0,0.7);
+            padding: 5px 8px;
+            border-radius: 3px;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            font-size: 0.7em;
+            text-align: center;
+        }
+
+        .result-info {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .result-status {
+            font-weight: bold;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .correct {
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            color: #e74c3c;
+        }
+
+        .back-button {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            max-width: 200px;
+        }
+
+        .game-description {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: var(--body-font-size, 1rem);
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 15px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .answers-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .character-image {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .game-title {
+                font-size: 1.7rem;
+            }
+            
+            .result-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .result-info {
+                text-align: center;
+            }
+            
+            .game-container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .character-image {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .game-title {
+                font-size: 1.5rem;
+            }
+            
+            .result-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .hint {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            
+            .game-button {
+                padding: 12px 20px;
+                min-height: 45px;
+            }
+        }
+    </style>
+</head>
+<body data-font-size="standard" data-container-width="standard">
+    <!-- Навигация загрузится через navbar.js -->
+    
+    <div class="game-container">
+        <!-- Экран меню -->
+        <div id="menu-screen" class="screen active">
+            <h1 class="game-title">Угадай персонажа</h1>
+            <div class="game-description">
+                Проверьте свои знания вселенной Игры Престолов!<br>
+                Выберите уровень сложности и попробуйте угадать персонажей по подсказкам.
+            </div>
+            
+            <div class="difficulty-buttons">
+                <button class="game-button" onclick="startGame(5)">Легкий уровень (5 персонажей)</button>
+                <button class="game-button" onclick="startGame(10)">Средний уровень (10 персонажей)</button>
+                <button class="game-button" onclick="startGame(15)">Сложный уровень (15 персонажей)</button>
+            </div>
+        </div>
+
+        <!-- Экран игры -->
+        <div id="game-screen" class="screen">
+            <h2 class="game-title">Кто этот персонаж?</h2>
+            <div class="progress" id="progress">Раунд 1 из 5</div>
+            
+            <div class="character-image" id="character-image">
+                <img src="" alt="Персонаж" id="character-img" style="display: none;">
+                <div id="character-placeholder" class="character-image-content">Изображение персонажа</div>
+            </div>
+            
+            <div class="hint" id="hint">
+                <!-- Подсказка будет добавлена динамически -->
+            </div>
+            
+            <div class="answers-grid" id="answers">
+                <!-- Варианты ответов будут добавлены динамически -->
+            </div>
+        </div>
+
+        <!-- Экран результатов -->
+        <div id="results-screen" class="screen">
+            <h1 class="game-title">Результаты игры</h1>
+            <div class="score-display" id="final-score">Вы угадали 0 из 0 персонажей</div>
+            <div class="grade-display" id="final-grade">Отлично! Вы настоящий фанат!</div>
+            
+            <h2 style="text-align: center; margin-bottom: 20px; font-size: 1.3em;">Детализация ответов:</h2>
+            <div class="results-container">
+                <div class="results-grid" id="results-grid">
+                    <!-- Результаты будут добавлены динамически -->
+                </div>
+            </div>
+            
+            <button class="game-button back-button" onclick="returnToMenu()">Вернуться в меню</button>
+        </div>
+    </div>
+
+    <script src="../navbar.js"></script>
+    <script>
+        // Данные персонажей
+        const characters = [
+            {
+                "name": "Джон Сноу",
+                "color": "#8B0000",
+                "hint": "Бастард Винтерфелла, знает ничего",
+                "options": ["Джон Сноу", "Робб Старк", "Теон Грейджой", "Джейме Ланнистер"]
+            },
+            {
+                "name": "Дейенерис Таргариен",
+                "color": "#DAA520",
+                "hint": "Мать драконов, претендентка на Железный Трон",
+                "options": ["Дейенерис Таргариен", "Маргери Тирелл", "Санса Старк", "Серсея Ланнистер"]
+            },
+            {
+                "name": "Тирион Ланнистер",
+                "color": "#C0C0C0",
+                "hint": "Карлик, пьет и знает вещи",
+                "options": ["Тирион Ланнистер", "Джорах Мормонт", "Петир Бейлиш", "Визерис Таргариен"]
+            },
+            {
+                "name": "Арья Старк",
+                "color": "#2F4F4F",
+                "hint": "Девушка со списком",
+                "options": ["Арья Старк", "Санса Старк", "Бриенна Тарт", "Мейс Тирелл"]
+            },
+            {
+                "name": "Санса Старк",
+                "color": "#9370DB",
+                "hint": "Королева Севера, умная и выносливая",
+                "options": ["Санса Старк", "Арья Старк", "Маргери Тирелл", "Дейенерис Таргариен"]
+            },
+            {
+                "name": "Серсея Ланнистер",
+                "color": "#B22222",
+                "hint": "Королева-регент, любит вино и власть",
+                "options": ["Серсея Ланнистер", "Дейенерис Таргариен", "Оленна Тирелл", "Мелисандра"]
+            },
+            {
+                "name": "Джейме Ланнистер",
+                "color": "#DAA520",
+                "hint": "Королевский Убийца, потерял правую руку",
+                "options": ["Джейме Ланнистер", "Джон Сноу", "Робб Старк", "Бронн"]
+            },
+            {
+                "name": "Бран Старк",
+                "color": "#2E8B57",
+                "hint": "Трехглазый ворон, король Шести Королевств",
+                "options": ["Бран Старк", "Джон Сноу", "Теон Грейджой", "Робб Старк"]
+            },
+            {
+                "name": "Теон Грейджой",
+                "color": "#4682B4",
+                "hint": "Принц Зимних Земель, пережил пытки",
+                "options": ["Теон Грейджой", "Джон Сноу", "Робб Старк", "Джейме Ланнистер"]
+            },
+            {
+                "name": "Джорах Мормонт",
+                "color": "#696969",
+                "hint": "Рыцарь, влюбленный в свою королеву",
+                "options": ["Джорах Мормонт", "Тирион Ланнистер", "Бронн", "Давос Сиворт"]
+            },
+            {
+                "name": "Бриенна Тарт",
+                "color": "#1E90FF",
+                "hint": "Воин-девственница, клялась в верности Старкам",
+                "options": ["Бриенна Тарт", "Арья Старк", "Санса Старк", "Яра Грейджой"]
+            },
+            {
+                "name": "Сэмвелл Тарли",
+                "color": "#778899",
+                "hint": "Мягкосердечный мейстер, убивший Белого Ходока",
+                "options": ["Сэмвелл Тарли", "Джон Сноу", "Пицель", "Джейме Ланнистер"]
+            },
+            {
+                "name": "Давос Сиворт",
+                "color": "#5F9EA0",
+                "hint": "Бывший контрабандист, советник Станниса",
+                "options": ["Давос Сиворт", "Джорах Мормонт", "Бронн", "Тирион Ланнистер"]
+            },
+            {
+                "name": "Мелисандра",
+                "color": "#DC143C",
+                "hint": "Красная жрица, служит Владыке Света",
+                "options": ["Мелисандра", "Серсея Ланнистер", "Оленна Тирелл", "Дейенерис Таргариен"]
+            },
+            {
+                "name": "Бронн",
+                "color": "#8B4513",
+                "hint": "Наемник, ставший лордом Хайгардена",
+                "options": ["Бронн", "Джорах Мормонт", "Давос Сиворт", "Тирион Ланнистер"]
+            }
+        ];
+
+        // Переменные игры
+        let currentScreen = 'menu';
+        let difficulty = 0;
+        let currentRound = 0;
+        let score = 0;
+        let gameCharacters = [];
+        let userAnswers = [];
+
+        // Функции игры
+        function showScreen(screenId) {
+            document.getElementById('menu-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.remove('active');
+            document.getElementById('results-screen').classList.remove('active');
+            
+            document.getElementById(screenId).classList.add('active');
+            currentScreen = screenId;
+        }
+
+        function startGame(diff) {
+            difficulty = diff;
+            currentRound = 0;
+            score = 0;
+            userAnswers = [];
+            
+            // Выбираем случайных персонажей
+            gameCharacters = [...characters]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, diff);
+            
+            showScreen('game-screen');
+            nextCharacter();
+        }
+
+        function nextCharacter() {
+            if (currentRound >= difficulty) {
+                endGame();
+                return;
+            }
+            
+            const character = gameCharacters[currentRound];
+            document.getElementById('progress').textContent = `Раунд ${currentRound + 1} из ${difficulty}`;
+            
+            // Устанавливаем изображение персонажа
+            const characterImg = document.getElementById('character-img');
+            const characterPlaceholder = document.getElementById('character-placeholder');
+            
+            // Пытаемся загрузить изображение (путь изменен для папки Guess The Character)
+            const imagePath = `characters/${character.name}.jpg`;
+            characterImg.src = imagePath;
+            characterImg.alt = character.name;
+            
+            // Показываем изображение когда оно загрузится
+            characterImg.onload = function() {
+                characterImg.style.display = 'block';
+                characterPlaceholder.style.display = 'none';
+            };
+            
+            // Если изображение не загружается, показываем заглушку
+            characterImg.onerror = function() {
+                characterImg.style.display = 'none';
+                characterPlaceholder.style.display = 'flex';
+                characterPlaceholder.textContent = character.name;
+                characterPlaceholder.style.background = `linear-gradient(135deg, ${character.color}, #333)`;
+            };
+            
+            // Устанавливаем подсказку
+            document.getElementById('hint').textContent = `Подсказка: ${character.hint}`;
+            
+            // Создаем кнопки ответов
+            const answersContainer = document.getElementById('answers');
+            answersContainer.innerHTML = '';
+            
+            // Перемешиваем варианты ответов
+            const shuffledOptions = [...character.options].sort(() => Math.random() - 0.5);
+            
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'answer-button';
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option, character.name);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedAnswer, correctAnswer) {
+            const isCorrect = selectedAnswer === correctAnswer;
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Сохраняем ответ пользователя
+            userAnswers.push({
+                character: gameCharacters[currentRound],
+                userAnswer: selectedAnswer,
+                correctAnswer: correctAnswer,
+                isCorrect: isCorrect
+            });
+            
+            currentRound++;
+            nextCharacter();
+        }
+
+        function endGame() {
+            showScreen('results-screen');
+            
+            // Обновляем счет
+            const finalScoreElement = document.getElementById('final-score');
+            finalScoreElement.textContent = `Вы угадали ${score} из ${difficulty} персонажей`;
+            
+            // Определяем оценку
+            const percentage = (score / difficulty) * 100;
+            const finalGradeElement = document.getElementById('final-grade');
+            
+            let gradeText;
+            if (percentage === 100) {
+                gradeText = "Отлично! Вы настоящий фанат!";
+            } else if (percentage >= 80) {
+                gradeText = "Очень хорошо! Вы хорошо знаете вселенную!";
+            } else if (percentage >= 60) {
+                gradeText = "Хорошо! Неплохой результат!";
+            } else if (percentage >= 40) {
+                gradeText = "Удовлетворительно. Могло быть и лучше.";
+            } else {
+                gradeText = "Попробуйте еще раз! Пересмотрите сериал!";
+            }
+            
+            finalGradeElement.textContent = gradeText;
+            
+            // Показываем детализацию ответов
+            const resultsGrid = document.getElementById('results-grid');
+            resultsGrid.innerHTML = '';
+            
+            userAnswers.forEach((answer, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${answer.isCorrect ? 'result-correct' : 'result-incorrect'}`;
+                
+                resultItem.innerHTML = `
+                    <div class="result-image">
+                        <img src="characters/${answer.character.name}.jpg" alt="${answer.character.name}" 
+                             onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\\'result-image-content\\'>${answer.character.name}</div>';">
+                    </div>
+                    <div class="result-info">
+                        <div><strong>Правильный ответ:</strong> ${answer.correctAnswer}</div>
+                        <div><strong>Ваш ответ:</strong> ${answer.userAnswer}</div>
+                        <div class="result-status ${answer.isCorrect ? 'correct' : 'incorrect'}">
+                            ${answer.isCorrect ? '✓ Верно' : '✗ Неверно'}
+                        </div>
+                    </div>
+                `;
+                
+                resultsGrid.appendChild(resultItem);
+            });
+        }
+
+        function returnToMenu() {
+            showScreen('menu-screen');
+        }
+    </script>
+</body>
+</html>
